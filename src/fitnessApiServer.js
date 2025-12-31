@@ -24,8 +24,15 @@ app.use(session({
 
 app.use(express.json());
 
-// Serve static files
-app.use(express.static(join(__dirname, "..", "public")));
+// Serve static files (but not trainingDashboard.html - that's protected)
+app.use(express.static(join(__dirname, "..", "public"), {
+  setHeaders: (res, path) => {
+    // Prevent caching of HTML files to ensure auth checks work
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
 
 // Auth middleware
 function requireAuth(req, res, next) {

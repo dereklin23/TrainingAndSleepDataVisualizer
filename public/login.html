@@ -191,6 +191,8 @@
         
         if (status.strava && status.oura) {
           dashboardButton.style.display = 'inline-block';
+          // Automatically redirect to dashboard
+          window.location.href = '/dashboard';
         }
       } catch (error) {
         console.error('Error checking auth status:', error);

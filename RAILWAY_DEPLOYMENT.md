@@ -69,15 +69,30 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ---
 
-## Step 4: Get Your Railway Domain
+## Step 4: Generate Domain and Configure Port
+
+### 4.1 Generate Domain
 
 1. Go to your Railway project
-2. Click on your service
-3. Go to **"Settings"** → **"Domains"**
-4. Click **"Generate Domain"**
-5. You'll get a free subdomain like: `resttorun-production.up.railway.app`
+2. Click on your service (RestToRun)
+3. Go to **"Settings"** → scroll to **"Networking"** section
+4. Under **"Public Networking"**, click **"Generate Domain"**
+5. Enter **port 3000** when prompted (or leave the default)
+6. You'll get a free subdomain like: `resttorun-production.up.railway.app`
 
-Copy this domain - you'll need it for the next step!
+### 4.2 **IMPORTANT: Fix Port Configuration** ⚠️
+
+Railway might generate the domain with port 3000, but the app runs on port 8080. You need to update this:
+
+1. In **"Settings"** → **"Networking"** → **"Public Networking"**
+2. Find your generated domain
+3. Click the **edit/pencil icon** next to the domain
+4. **Change the port from 3000 to 8080**
+5. Save the change
+
+**This step is critical!** Without it, you'll get 502 errors even though the server is running.
+
+Copy your domain - you'll need it for the next step!
 
 ---
 
@@ -117,7 +132,7 @@ Copy this domain - you'll need it for the next step!
 
 ---
 
-## Step 7: Test Your Deployment
+## Step 7: Test Your Deployment! 🎉
 
 1. Visit your Railway domain: `https://your-app-name.up.railway.app`
 2. You should see the login page
@@ -157,6 +172,24 @@ Want to use `resttorun.com` instead of the Railway subdomain?
 ---
 
 ## Troubleshooting
+
+### 502 Bad Gateway Error
+
+If you see "Application failed to respond":
+
+1. **Check Port Configuration** (Most Common Issue!)
+   - Go to Settings → Networking → Public Networking
+   - Make sure the port is set to **8080**, not 3000
+   - Click edit (pencil icon) and update if needed
+
+2. **Check Deploy Logs**
+   - Look for "Server running on port 8080"
+   - Look for "Successfully connected to Redis"
+   - If you see these, the app is running correctly
+
+3. **Check Variables**
+   - Make sure all environment variables are set correctly
+   - Especially check `REDIS_URL` is present (auto-added by Redis database)
 
 ### App Won't Start
 - Check logs in Railway dashboard

@@ -21,13 +21,22 @@ Your app is now **ready to deploy**! Follow these simple steps:
 2. Select **"Database"** → **"Redis"**
 3. Done! Railway auto-configures the connection
 
-## Step 4: Get Your Domain
+## Step 4: Generate Domain and Configure Port ⚠️
 
-1. Click on your service (the app, not Redis)
-2. Go to **"Settings"** tab
-3. Scroll to **"Domains"**
-4. Click **"Generate Domain"**
-5. Copy your new URL: `something.up.railway.app`
+### Generate Domain:
+1. Click on your service (RestToRun, not Redis)
+2. Go to **"Settings"** tab → scroll to **"Networking"**
+3. Click **"Generate Domain"** under Public Networking
+4. Copy your new URL: `something.up.railway.app`
+
+### **CRITICAL: Fix Port** ⚠️
+Railway may set port 3000, but the app runs on 8080:
+1. In **Networking** section, find your domain
+2. Click the **edit/pencil icon** (✏️)
+3. **Change port from 3000 to 8080**
+4. Save!
+
+**Without this step, you'll get 502 errors!**
 
 ## Step 5: Add Environment Variables
 
@@ -111,8 +120,10 @@ Railway will automatically redeploy after you update variables.
 ## Troubleshooting
 
 ### Can't access the site?
-- Check Railway logs: Service → **"Logs"** tab
+- **502 Error?** Check port is set to 8080 (Settings → Networking → edit domain)
+- Check Railway logs: Service → **"Deploy Logs"** tab
 - Make sure all environment variables are set
+- Verify Redis database is connected (check for REDIS_URL variable)
 
 ### OAuth errors?
 - Verify redirect URIs match exactly (no trailing slashes!)

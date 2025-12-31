@@ -24,6 +24,12 @@ A comprehensive fitness dashboard that overlays and visualizes training data fro
   - Total and average running distance
   - Pace, heart rate, and cadence statistics
 
+### 🔐 Authentication & Security
+- **Multi-user OAuth 2.0** for Strava and Oura
+- **Session management** with Redis (production) or memory (development)
+- **Protected routes** requiring authentication
+- **Logout functionality** with session cleanup
+
 ### 📅 Flexible Date Ranges
 - Today view
 - Last 7 days
@@ -39,11 +45,22 @@ A comprehensive fitness dashboard that overlays and visualizes training data fro
 - Card-based layout
 - Adaptive single-day vs multi-day views
 
+## 🌐 Live Demo
+
+**Production:** https://resttorun-production.up.railway.app
+
+Experience RestToRun live! Connect your Strava and Oura accounts to see your personalized dashboard with training and recovery metrics.
+
+---
+
 ## 🛠 Tech Stack
 
 - **Backend**: Node.js + Express
 - **Frontend**: Vanilla JavaScript + Chart.js
 - **APIs**: Strava API v3, Oura Ring API v2
+- **Authentication**: OAuth 2.0 with express-session
+- **Session Store**: Redis (production) / Memory (development)
+- **Hosting**: Railway (with Redis database)
 - **Data Processing**: Custom integration service for Strava and Oura data
 
 ## 📁 Project Structure
@@ -230,6 +247,13 @@ The application uses text-based log indicators for clarity:
 | `[TOOLTIP]` | Tooltip formatting logs |
 
 ## 📈 Recent Updates
+
+### December 31, 2025 - Production Deployment 🎉
+- **Successfully deployed to Railway**: https://resttorun-production.up.railway.app
+- **Added Redis session store** for production scalability
+- **Implemented health check endpoint** for monitoring
+- **Fixed Railway port configuration** (8080)
+- **Multi-user OAuth authentication** now live in production
 
 ### December 30, 2025
 - **Refactored file structure** for improved clarity:

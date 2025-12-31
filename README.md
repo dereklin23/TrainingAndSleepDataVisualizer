@@ -211,7 +211,7 @@ The application uses text-based log indicators for clarity:
 
 ## 📈 Recent Updates
 
-### December 30, 2024
+### December 30, 2025
 - **Refactored file structure** for improved clarity:
   - Renamed files to be more descriptive
   - Better organization of client/server code
@@ -219,7 +219,7 @@ The application uses text-based log indicators for clarity:
 - **Added comprehensive documentation**
 - **Improved code maintainability**
 
-### December 29, 2024
+### December 29, 2025
 - **Initial commit** with working Strava and Oura API integration
 - **Frontend implementation** with Chart.js visualizations
 - **Routed sleep data** and running mileage for user

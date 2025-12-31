@@ -29,6 +29,7 @@ A comprehensive fitness dashboard that overlays and visualizes training data fro
 - Last 7 days
 - Last 30 days
 - This month / Last month
+- This year / Last year
 - Custom date range selection
 
 ### 🎨 Modern UI
@@ -133,6 +134,7 @@ Use the preset buttons or custom date picker to view different time periods:
 - **Today**: Current day's data (simplified view)
 - **Last 7/30 Days**: Recent training and sleep trends
 - **This/Last Month**: Monthly overview
+- **This/Last Year**: Full year view for long-term analysis
 - **Custom Range**: Pick any start and end date
 
 ## 📡 API Endpoints

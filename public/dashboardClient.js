@@ -1651,6 +1651,16 @@ function setupDateSelector() {
           startDate = new Date(lastMonth);
           endDate = new Date(today.getFullYear(), today.getMonth(), 0); // Last day of last month
           break;
+        case 'thisYear':
+          // January 1st of current year to today
+          startDate = new Date(today.getFullYear(), 0, 1);
+          endDate = new Date(today);
+          break;
+        case 'lastYear':
+          // January 1st to December 31st of previous year
+          startDate = new Date(today.getFullYear() - 1, 0, 1);
+          endDate = new Date(today.getFullYear() - 1, 11, 31);
+          break;
         default:
           return;
       }

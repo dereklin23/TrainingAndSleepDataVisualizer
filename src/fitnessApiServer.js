@@ -71,6 +71,12 @@ async function startServer() {
 
   app.use(express.json());
 
+  // Log all incoming requests for debugging
+  app.use((req, res, next) => {
+    console.log(`[HTTP] ${req.method} ${req.path} from ${req.ip}`);
+    next();
+  });
+
   // Serve static files (excluding protected files)
   const staticOptions = {
     setHeaders: (res, path) => {
@@ -406,20 +412,23 @@ async function startServer() {
 
   // Start server
   const server = app.listen(port, '0.0.0.0', () => {
+    const addr = server.address();
     console.log(`[INFO] Server running on port ${port}`);
-    console.log(`[INFO] Listening on 0.0.0.0:${port}`);
+    console.log(`[INFO] Listening on ${addr.address}:${addr.port}`);
     console.log(`[INFO] Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`[INFO] Ready to accept connections`);
   });
 
   server.on('error', (err) => {
     console.error('[ERROR] Server error:', err);
+    if (err.code === 'EADDRINUSE') {
+      console.error(`[ERROR] Port ${port} is already in use`);
+      process.exit(1);
+    }
   });
 
-  // Log all requests for debugging
-  app.use((req, res, next) => {
-    console.log(`[HTTP] ${req.method} ${req.path} from ${req.ip}`);
-    next();
+  server.on('connection', (socket) => {
+    console.log('[INFO] New connection established');
   });
 }
 

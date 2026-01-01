@@ -922,6 +922,69 @@
         justify-self: start;
       }
     }
+    
+    /* Yearly Goals Modal Styles */
+    .quarterly-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #ecf0f1;
+    }
+    .quarter-tab {
+      flex: 1;
+      padding: 12px 20px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: #7f8c8d;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quarter-tab:hover {
+      color: #3498db;
+    }
+    .quarter-tab.active {
+      color: #3498db;
+      border-bottom-color: #3498db;
+    }
+    .quarter-form {
+      display: none;
+    }
+    .quarter-form.active {
+      display: block;
+    }
+    .week-inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+    }
+    .week-input-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .week-input-item label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #2c3e50;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .week-input-item input {
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #2c3e50;
+      text-align: center;
+    }
+    .week-input-item input:focus {
+      outline: none;
+      border-color: #3498db;
+    }
   </style>
 </head>
 <body>
@@ -963,8 +1026,8 @@
   <!-- Yearly Goals Planner -->
   <div class="yearly-goals-container" id="yearlyGoalsContainer">
     <div class="yearly-goals-header">
-      <h2>📅 Next Year's Mileage Plan</h2>
-      <button id="generateYearlyPlanBtn">Generate Plan</button>
+      <h2>📅 2026 Weekly Mileage Goals</h2>
+      <button id="editYearlyPlanBtn">Edit Goals</button>
     </div>
     <div id="yearlyGoalsContent">
       <!-- Yearly plan will be inserted here -->
@@ -1056,6 +1119,58 @@
       <div class="modal-footer">
         <button class="btn-cancel" id="cancelGoalsBtn">Cancel</button>
         <button class="btn-save" id="saveGoalsBtn">Save Goals</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Yearly Goals Input Modal -->
+  <div class="modal" id="yearlyGoalsModal">
+    <div class="modal-content" style="max-width: 900px; max-height: 80vh; overflow-y: auto;">
+      <div class="modal-header">
+        <h3>📅 Set Weekly Mileage Goals for 2026</h3>
+        <button class="modal-close" id="closeYearlyModalBtn">&times;</button>
+      </div>
+      
+      <p style="color: #7f8c8d; margin-bottom: 20px; text-align: center;">
+        Enter your target weekly mileage for each week. Leave blank or 0 for rest weeks.
+      </p>
+
+      <div class="yearly-goals-form">
+        <div class="quarterly-tabs">
+          <button class="quarter-tab active" data-quarter="1">Q1 (Weeks 1-13)</button>
+          <button class="quarter-tab" data-quarter="2">Q2 (Weeks 14-26)</button>
+          <button class="quarter-tab" data-quarter="3">Q3 (Weeks 27-39)</button>
+          <button class="quarter-tab" data-quarter="4">Q4 (Weeks 40-52)</button>
+        </div>
+
+        <div class="quarter-form quarter-1 active">
+          <div class="week-inputs-grid" id="q1-inputs">
+            <!-- Q1 week inputs will be generated here -->
+          </div>
+        </div>
+
+        <div class="quarter-form quarter-2">
+          <div class="week-inputs-grid" id="q2-inputs">
+            <!-- Q2 week inputs will be generated here -->
+          </div>
+        </div>
+
+        <div class="quarter-form quarter-3">
+          <div class="week-inputs-grid" id="q3-inputs">
+            <!-- Q3 week inputs will be generated here -->
+          </div>
+        </div>
+
+        <div class="quarter-form quarter-4">
+          <div class="week-inputs-grid" id="q4-inputs">
+            <!-- Q4 week inputs will be generated here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" id="cancelYearlyGoalsBtn">Cancel</button>
+        <button class="btn-save" id="saveYearlyGoalsBtn">Save Plan</button>
       </div>
     </div>
   </div>

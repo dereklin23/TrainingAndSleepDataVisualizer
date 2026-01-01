@@ -600,11 +600,11 @@ async function loadDataAndCreateCharts(startDate, endDate) {
       }
       renderYearlyGoalsPlan(data);
       
-      // Add event listener for generate button
+      // Add event listener for edit button
       setTimeout(() => {
-        const generateBtn = document.getElementById('generateYearlyPlanBtn');
-        if (generateBtn) {
-          generateBtn.addEventListener('click', generateAndShowPlan);
+        const editBtn = document.getElementById('editYearlyPlanBtn');
+        if (editBtn) {
+          editBtn.addEventListener('click', openYearlyGoalsModal);
         }
       }, 100);
     } else {
@@ -2502,20 +2502,148 @@ function renderYearlyGoalsPlan(data) {
     container.innerHTML = `
       <div style="text-align: center; padding: 40px;">
         <p style="font-size: 18px; color: #2c3e50; margin-bottom: 20px;">
-          📊 Generate your personalized weekly mileage plan for ${new Date().getFullYear() + 1}
+          📊 Set your weekly mileage goals for ${new Date().getFullYear() + 1}
         </p>
         <p style="color: #7f8c8d; margin-bottom: 30px;">
-          Based on your current training data, we'll create a progressive plan<br>
-          that helps you safely increase mileage throughout the year.
+          Enter your target weekly mileage for each week of the year.<br>
+          Plan your training progression the way YOU want!
         </p>
-        <button id="generateYearlyPlanBtn" style="padding: 15px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
-          Generate My Plan
+        <button id="setWeeklyGoalsBtn" style="padding: 15px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+          Set Weekly Goals
         </button>
       </div>
     `;
+    
+    // Add event listener for the button
+    setTimeout(() => {
+      const btn = document.getElementById('setWeeklyGoalsBtn');
+      if (btn) {
+        btn.addEventListener('click', openYearlyGoalsModal);
+      }
+    }, 100);
   }
   
   console.log('[YEARLY GOALS] Planner rendered');
+}
+
+function openYearlyGoalsModal() {
+  const modal = document.getElementById('yearlyGoalsModal');
+  if (!modal) return;
+
+  // Generate week inputs for all quarters
+  generateWeekInputs();
+
+  // Show modal
+  modal.classList.add('active');
+
+  // Setup event listeners
+  setupYearlyGoalsModalListeners();
+}
+
+function generateWeekInputs() {
+  const quarters = [
+    { id: 'q1-inputs', start: 1, end: 13 },
+    { id: 'q2-inputs', start: 14, end: 26 },
+    { id: 'q3-inputs', start: 27, end: 39 },
+    { id: 'q4-inputs', start: 40, end: 52 }
+  ];
+
+  quarters.forEach(quarter => {
+    const container = document.getElementById(quarter.id);
+    if (!container) return;
+
+    let html = '';
+    for (let week = quarter.start; week <= quarter.end; week++) {
+      html += `
+        <div class="week-input-item">
+          <label for="week-${week}">Week ${week}</label>
+          <input type="number" id="week-${week}" min="0" step="0.5" placeholder="0" />
+        </div>
+      `;
+    }
+    container.innerHTML = html;
+  });
+}
+
+function setupYearlyGoalsModalListeners() {
+  // Quarter tab switching
+  const quarterTabs = document.querySelectorAll('.quarter-tab');
+  quarterTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const quarter = this.getAttribute('data-quarter');
+      
+      // Update tabs
+      quarterTabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update forms
+      document.querySelectorAll('.quarter-form').forEach(form => {
+        form.classList.remove('active');
+      });
+      document.querySelector(`.quarter-${quarter}`).classList.add('active');
+    });
+  });
+
+  // Close button
+  const closeBtn = document.getElementById('closeYearlyModalBtn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeYearlyGoalsModal);
+  }
+
+  // Cancel button
+  const cancelBtn = document.getElementById('cancelYearlyGoalsBtn');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', closeYearlyGoalsModal);
+  }
+
+  // Save button
+  const saveBtn = document.getElementById('saveYearlyGoalsBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', saveYearlyGoals);
+  }
+}
+
+function closeYearlyGoalsModal() {
+  const modal = document.getElementById('yearlyGoalsModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+
+function saveYearlyGoals() {
+  const weeklyGoals = [];
+  
+  // Collect all 52 weeks
+  for (let week = 1; week <= 52; week++) {
+    const input = document.getElementById(`week-${week}`);
+    const value = input ? parseFloat(input.value) || 0 : 0;
+    weeklyGoals.push(value);
+  }
+
+  // Validate - at least some weeks should have goals
+  const totalMileage = weeklyGoals.reduce((sum, w) => sum + w, 0);
+  if (totalMileage === 0) {
+    alert('Please enter mileage goals for at least some weeks!');
+    return;
+  }
+
+  // Create custom plan
+  const plan = yearlyGoalsPlanner.createCustomPlan(weeklyGoals);
+  
+  if (plan) {
+    // Save the plan
+    yearlyGoalsPlanner.savePlan(plan);
+    
+    // Close modal
+    closeYearlyGoalsModal();
+    
+    // Render the plan
+    renderExistingPlan(plan);
+    
+    alert('✓ Weekly goals saved successfully!');
+  } else {
+    alert('Error creating plan. Please try again.');
+  }
 }
 
 function generateAndShowPlan() {
@@ -2614,25 +2742,38 @@ function renderExistingPlan(plan) {
   // Actions
   html += `
     <div class="plan-actions">
-      <button class="btn-accept" onclick="acceptYearlyPlan()">✓ Accept Plan</button>
-      <button class="btn-customize" onclick="regenerateYearlyPlan()">⚙️ Regenerate</button>
+      <button class="btn-customize" onclick="editYearlyPlan()">✏️ Edit Goals</button>
+      <button class="btn-accept" onclick="clearYearlyPlan()">🗑️ Clear Plan</button>
     </div>
   `;
 
   container.innerHTML = html;
 }
 
-// Accept yearly plan (could integrate with goals system)
-window.acceptYearlyPlan = function() {
-  alert('Plan accepted! Weekly goals will be automatically suggested based on your plan.');
-  // TODO: Integrate with weekly goals system
+// Edit yearly plan
+window.editYearlyPlan = function() {
+  const plan = yearlyGoalsPlanner.loadPlan();
+  if (!plan) return;
+  
+  // Open modal and pre-fill with existing values
+  openYearlyGoalsModal();
+  
+  // Pre-fill the inputs after a short delay
+  setTimeout(() => {
+    plan.plan.forEach((weekPlan, index) => {
+      const input = document.getElementById(`week-${index + 1}`);
+      if (input && weekPlan.plannedMileage > 0) {
+        input.value = weekPlan.plannedMileage;
+      }
+    });
+  }, 200);
 };
 
-// Regenerate plan
-window.regenerateYearlyPlan = function() {
-  if (confirm('Generate a new plan? This will replace your current plan.')) {
-    yearlyGoalsPlanner.savePlan(null); // Clear existing
-    generateAndShowPlan();
+// Clear yearly plan
+window.clearYearlyPlan = function() {
+  if (confirm('Clear your weekly goals? This cannot be undone.')) {
+    yearlyGoalsPlanner.savePlan(null);
+    renderYearlyGoalsPlan(window.currentData);
   }
 };
 

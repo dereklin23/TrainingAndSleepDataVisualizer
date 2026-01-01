@@ -104,6 +104,57 @@ class YearlyGoalsPlanner {
   }
 
   /**
+   * Create a custom plan with user-defined weekly goals
+   */
+  createCustomPlan(weeklyGoals) {
+    if (!weeklyGoals || weeklyGoals.length !== this.weeksPerYear) {
+      return null;
+    }
+
+    const nextYear = new Date().getFullYear() + 1;
+    const plan = [];
+
+    weeklyGoals.forEach((mileage, index) => {
+      const week = index + 1;
+      const plannedMileage = parseFloat(mileage) || 0;
+      
+      // Calculate safe range (±10%)
+      const minMileage = plannedMileage * 0.9;
+      const maxMileage = plannedMileage * 1.1;
+
+      plan.push({
+        week,
+        year: nextYear,
+        plannedMileage: Math.round(plannedMileage * 10) / 10,
+        minMileage: Math.round(minMileage * 10) / 10,
+        maxMileage: Math.round(maxMileage * 10) / 10,
+        isDeloadWeek: false,
+        phase: 'custom'
+      });
+    });
+
+    const totalYearMileage = plan.reduce((sum, w) => sum + w.plannedMileage, 0);
+    const avgWeeklyMileage = totalYearMileage / this.weeksPerYear;
+    const nonZeroWeeks = plan.filter(w => w.plannedMileage > 0);
+    const startingMileage = nonZeroWeeks.length > 0 ? nonZeroWeeks[0].plannedMileage : 0;
+    const targetMileage = nonZeroWeeks.length > 0 ? nonZeroWeeks[nonZeroWeeks.length - 1].plannedMileage : 0;
+
+    return {
+      year: nextYear,
+      plan,
+      summary: {
+        startingMileage: Math.round(startingMileage * 10) / 10,
+        targetMileage: Math.round(targetMileage * 10) / 10,
+        totalYearMileage: Math.round(totalYearMileage),
+        avgWeeklyMileage: Math.round(avgWeeklyMileage * 10) / 10,
+        increasePercent: startingMileage > 0 ? Math.round(((targetMileage - startingMileage) / startingMileage) * 100) : 0,
+        deloadWeeks: 0,
+        progressionType: 'custom'
+      }
+    };
+  }
+
+  /**
    * Generate progressive weekly mileage goals for next year
    */
   generateYearlyPlan(currentTraining, options = {}) {

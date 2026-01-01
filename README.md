@@ -6,9 +6,27 @@ A comprehensive fitness dashboard that overlays and visualizes training data fro
 ![Node.js](https://img.shields.io/badge/Node.js-v18+-green)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
-## ✨ Features
+## 📸 Screenshots & Feature Showcase
 
-> 📸 **Want to see it in action?** Check out our [**Feature Showcase**](./FEATURES.md) with screenshots and detailed descriptions!
+**👉 [View Full Feature Showcase with Screenshots →](./FEATURES.md)**
+
+### Quick Preview
+
+| Feature | Screenshot |
+|---------|-----------|
+| **Date Range Selection** | [![Date Range Selector](docs/screenshots/date-range-selector.png)](./FEATURES.md#date-range-selection) |
+| **Goals & Progress Tracking** | [![Goals & Progress](docs/screenshots/goals-and-progress.png)](./FEATURES.md#goals--progress-tracking) |
+| **Recovery & Performance Metrics** | [![Recovery & Performance](docs/screenshots/recovery-metrics-performance-metrics.png)](./FEATURES.md#recovery--performance-metrics) |
+| **Sleep & Running Data Charts** | [![Sleep & Running Charts](docs/screenshots/sleep-run-data.png)](./FEATURES.md#sleep-breakdown--training-metrics) |
+| **Weekly Mileage Visualization** | [![Weekly Mileage](docs/screenshots/weekly-mileage-chart.png)](./FEATURES.md#weekly-mileage-overview) |
+| **Yearly Mileage Planning** | [![Yearly Goals](docs/screenshots/yearly-mileage-goals.png)](./FEATURES.md#yearly-mileage-planning) |
+| **Training Load Analysis** | [![Training Load](docs/screenshots/goals-and-progress.png)](./FEATURES.md#training-load--recovery-analysis) |
+
+> 📖 **See detailed descriptions and more screenshots in the [**Complete Feature Showcase**](./FEATURES.md)**
+
+---
+
+## ✨ Features
 
 ### 🎯 Goal Tracking & Progress Monitoring
 - **Weekly & Monthly Goals**: Set targets for mileage, runs, sleep, and readiness

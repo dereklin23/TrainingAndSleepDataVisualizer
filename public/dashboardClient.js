@@ -573,8 +573,8 @@ async function loadDataAndCreateCharts(startDate, endDate) {
     // Calculate and display statistics
     updateStatistics(data, totalSleep, light, rem, deep, distance, sleepScores, readinessScores, pace, averageHeartrate, maxHeartrate, cadence, isSingleDay);
     
-    // Update goals progress with loaded data
-    updateGoalsWithData(data);
+    // Update goals progress with loaded data (hide for single-day views)
+    updateGoalsWithData(data, isSingleDay);
     
     // Debug: log data to verify it's correct
     console.log("Chart data summary:", {
@@ -2232,8 +2232,24 @@ function renderGoals() {
 }
 
 // Update goals progress when new data is loaded
-function updateGoalsWithData(data) {
+function updateGoalsWithData(data, isSingleDay = false) {
   if (!goalsManager || !data) return;
+  
+  const goalsContainer = document.getElementById('goalsContainer');
+  
+  // Hide goals for single-day views
+  if (isSingleDay || data.length <= 1) {
+    console.log('[GOALS] Hiding goals for single-day view');
+    if (goalsContainer) {
+      goalsContainer.style.display = 'none';
+    }
+    return;
+  }
+  
+  // Show goals for multi-day views
+  if (goalsContainer) {
+    goalsContainer.style.display = 'block';
+  }
   
   // Store data globally for access in other functions
   window.currentData = data;

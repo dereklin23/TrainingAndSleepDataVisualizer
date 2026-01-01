@@ -10,6 +10,9 @@ const MAX_RETRIES = 50; // Max 5 seconds of retries
 // Initialize Training Load Analyzer
 let trainingLoadAnalyzer = null;
 
+// Initialize Yearly Goals Planner
+let yearlyGoalsPlanner = null;
+
 // Wait for DOM and Chart.js to be ready
 function initCharts() {
   // Prevent multiple calls
@@ -587,6 +590,28 @@ async function loadDataAndCreateCharts(startDate, endDate) {
       const trainingLoadContainer = document.getElementById('trainingLoadContainer');
       if (trainingLoadContainer) {
         trainingLoadContainer.style.display = 'none';
+      }
+    }
+    
+    // Update yearly goals planner (hide for single-day views)
+    if (!isSingleDay) {
+      if (!yearlyGoalsPlanner) {
+        yearlyGoalsPlanner = new YearlyGoalsPlanner();
+      }
+      renderYearlyGoalsPlan(data);
+      
+      // Add event listener for generate button
+      setTimeout(() => {
+        const generateBtn = document.getElementById('generateYearlyPlanBtn');
+        if (generateBtn) {
+          generateBtn.addEventListener('click', generateAndShowPlan);
+        }
+      }, 100);
+    } else {
+      // Hide yearly goals container for single day view
+      const yearlyGoalsContainer = document.getElementById('yearlyGoalsContainer');
+      if (yearlyGoalsContainer) {
+        yearlyGoalsContainer.style.display = 'none';
       }
     }
     
@@ -2451,6 +2476,165 @@ function renderTrainingLoadAnalysis(data) {
   container.innerHTML = html;
   console.log('[TRAINING LOAD] Analysis rendered');
 }
+
+// Yearly Goals Planner Rendering
+function renderYearlyGoalsPlan(data) {
+  const container = document.getElementById('yearlyGoalsContent');
+  const containerParent = document.getElementById('yearlyGoalsContainer');
+  
+  if (!container || !data || data.length === 0) return;
+
+  // Make sure the container is visible
+  if (containerParent) {
+    containerParent.style.display = 'block';
+  }
+
+  if (!yearlyGoalsPlanner) {
+    yearlyGoalsPlanner = new YearlyGoalsPlanner();
+  }
+
+  // Check if a plan already exists
+  let existingPlan = yearlyGoalsPlanner.loadPlan();
+  
+  if (existingPlan) {
+    renderExistingPlan(existingPlan);
+  } else {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px;">
+        <p style="font-size: 18px; color: #2c3e50; margin-bottom: 20px;">
+          📊 Generate your personalized weekly mileage plan for ${new Date().getFullYear() + 1}
+        </p>
+        <p style="color: #7f8c8d; margin-bottom: 30px;">
+          Based on your current training data, we'll create a progressive plan<br>
+          that helps you safely increase mileage throughout the year.
+        </p>
+        <button id="generateYearlyPlanBtn" style="padding: 15px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+          Generate My Plan
+        </button>
+      </div>
+    `;
+  }
+  
+  console.log('[YEARLY GOALS] Planner rendered');
+}
+
+function generateAndShowPlan() {
+  if (!window.currentData || window.currentData.length === 0) {
+    alert('Need at least some training data to generate a plan. Start logging your runs!');
+    return;
+  }
+
+  const currentTraining = yearlyGoalsPlanner.analyzeCurrentTraining(window.currentData);
+  
+  if (!currentTraining) {
+    alert('Unable to analyze current training. Need more data!');
+    return;
+  }
+
+  // Generate plan with conservative progression
+  const plan = yearlyGoalsPlanner.generateYearlyPlan(currentTraining, {
+    progressionType: 'conservative',
+    targetIncrease: 20, // 20% increase
+    includeDeloadWeeks: true
+  });
+
+  // Save the plan
+  yearlyGoalsPlanner.savePlan(plan);
+  
+  // Render it
+  renderExistingPlan(plan);
+}
+
+function renderExistingPlan(plan) {
+  const container = document.getElementById('yearlyGoalsContent');
+  if (!container) return;
+
+  const currentTraining = yearlyGoalsPlanner.analyzeCurrentTraining(window.currentData);
+  const quarterly = yearlyGoalsPlanner.getQuarterlyBreakdown(plan);
+  const recommendations = yearlyGoalsPlanner.generateRecommendations(currentTraining);
+
+  let html = '';
+
+  // Summary Section
+  html += `
+    <div class="yearly-summary">
+      <div class="yearly-summary-item">
+        <div class="yearly-summary-label">Starting Mileage</div>
+        <div class="yearly-summary-value">${plan.summary.startingMileage}</div>
+        <div class="yearly-summary-unit">mi/week</div>
+      </div>
+      <div class="yearly-summary-item">
+        <div class="yearly-summary-label">Target Mileage</div>
+        <div class="yearly-summary-value">${plan.summary.targetMileage}</div>
+        <div class="yearly-summary-unit">mi/week</div>
+      </div>
+      <div class="yearly-summary-item">
+        <div class="yearly-summary-label">Total Year</div>
+        <div class="yearly-summary-value">${plan.summary.totalYearMileage}</div>
+        <div class="yearly-summary-unit">miles</div>
+      </div>
+      <div class="yearly-summary-item">
+        <div class="yearly-summary-label">Increase</div>
+        <div class="yearly-summary-value">+${plan.summary.increasePercent}%</div>
+        <div class="yearly-summary-unit">from current</div>
+      </div>
+    </div>
+  `;
+
+  // Quarterly Breakdown
+  if (quarterly) {
+    html += '<div class="quarterly-breakdown">';
+    quarterly.forEach(q => {
+      html += `
+        <div class="quarter-card">
+          <h4>${q.quarter} ${plan.year}</h4>
+          <div class="metric">
+            <span>Total Mileage</span>
+            <span class="metric-value">${q.totalMileage} mi</span>
+          </div>
+          <div class="metric">
+            <span>Avg Weekly</span>
+            <span class="metric-value">${q.avgWeeklyMileage} mi</span>
+          </div>
+        </div>
+      `;
+    });
+    html += '</div>';
+  }
+
+  // Recommendations
+  if (recommendations && recommendations.length > 0) {
+    html += '<div class="recommendations-list"><h4>📝 Training Recommendations</h4>';
+    recommendations.forEach(rec => {
+      html += `<div class="recommendation-item">${rec}</div>`;
+    });
+    html += '</div>';
+  }
+
+  // Actions
+  html += `
+    <div class="plan-actions">
+      <button class="btn-accept" onclick="acceptYearlyPlan()">✓ Accept Plan</button>
+      <button class="btn-customize" onclick="regenerateYearlyPlan()">⚙️ Regenerate</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+// Accept yearly plan (could integrate with goals system)
+window.acceptYearlyPlan = function() {
+  alert('Plan accepted! Weekly goals will be automatically suggested based on your plan.');
+  // TODO: Integrate with weekly goals system
+};
+
+// Regenerate plan
+window.regenerateYearlyPlan = function() {
+  if (confirm('Generate a new plan? This will replace your current plan.')) {
+    yearlyGoalsPlanner.savePlan(null); // Clear existing
+    generateAndShowPlan();
+  }
+};
 
 // Initialize goals system when DOM is ready
 if (document.readyState === 'loading') {

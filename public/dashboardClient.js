@@ -133,9 +133,18 @@ function formatDateRangeTitle(startDate, endDate) {
   // Check if it's a single day (Today view)
   const isSameDay = startDate === endDate;
   if (isSameDay) {
-    // Check if it's actually today
-    const today = new Date();
-    const todayStr = today.toISOString().split('T')[0];
+    // Check if it's actually today (using local timezone)
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+    
+    const todayStr = formatDate(today);
     
     if (startDate === todayStr) {
       return "Today";
@@ -2450,13 +2459,21 @@ function renderTrainingLoadAnalysis(data) {
 
   html += '</div>';
 
-  // Calendar view for last 14 days
-  const today = new Date();
+  // Calendar view for last 14 days (using local timezone)
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const fourteenDaysAgo = new Date(today);
   fourteenDaysAgo.setDate(today.getDate() - 13);
   
-  const startDate = fourteenDaysAgo.toISOString().split('T')[0];
-  const endDate = today.toISOString().split('T')[0];
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
+  const startDate = formatDate(fourteenDaysAgo);
+  const endDate = formatDate(today);
   
   const calendar = trainingLoadAnalyzer.generateCalendarRecommendations(data, startDate, endDate);
   

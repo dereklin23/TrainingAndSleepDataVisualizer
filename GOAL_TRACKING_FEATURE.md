@@ -146,7 +146,7 @@ updateGoalsWithData()    // Update progress from data
    - Responsive breakpoints defined for mobile
 
 3. **Storage**:
-   - Goals stored in `localStorage` under key `athlete_signal_goals`
+   - Goals stored in `localStorage` under key `athletesignal_goals`
    - Data structure includes weekly, monthly, and streaks
    - Easy to migrate to backend storage if needed
 

@@ -2,7 +2,7 @@
 
 A comprehensive fitness dashboard that combines Strava training data with Oura Ring recovery metrics. Train smarter, recover better.
 
-**Live Demo:** [https://athlete-signal-production.up.railway.app](https://athlete-signal-production.up.railway.app)
+**Live Demo:** [https://athletesignal-production.up.railway.app](https://athletesignal-production.up.railway.app)
 
 ---
 
@@ -258,7 +258,7 @@ Each quarter shows:
 
 ## 🚀 Getting Started
 
-1. **Visit**: [https://athlete-signal-production.up.railway.app](https://athlete-signal-production.up.railway.app)
+1. **Visit**: [https://athletesignal-production.up.railway.app](https://athletesignal-production.up.railway.app)
 2. **Connect Strava**: Authorize access to your running data
 3. **Connect Oura**: Authorize access to your sleep/recovery data
 4. **Explore**: Start tracking your training and recovery!

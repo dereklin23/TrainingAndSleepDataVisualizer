@@ -1,6 +1,6 @@
 # Athlete Signal - Successfully Deployed! 🎉
 
-**Live URL:** https://athlete-signal-production.up.railway.app
+**Live URL:** https://athletesignal-production.up.railway.app
 
 ## Deployment Summary
 
@@ -8,7 +8,7 @@ Athlete Signal has been successfully deployed to Railway with the following setu
 
 ### Infrastructure
 - **Hosting:** Railway (https://railway.app)
-- **Domain:** athlete-signal-production.up.railway.app (free Railway subdomain)
+- **Domain:** athletesignal-production.up.railway.app (free Railway subdomain)
 - **Database:** Redis (for production session storage)
 - **Port:** 8080
 - **Environment:** Production
@@ -32,8 +32,8 @@ Athlete Signal has been successfully deployed to Railway with the following setu
 - `REDIS_URL` (auto-configured by Railway)
 
 **OAuth Redirect URIs:**
-- Strava: `athlete-signal-production.up.railway.app` (Authorization Callback Domain)
-- Oura: `https://athlete-signal-production.up.railway.app/auth/oura/callback`
+- Strava: `athletesignal-production.up.railway.app` (Authorization Callback Domain)
+- Oura: `https://athletesignal-production.up.railway.app/auth/oura/callback`
 
 ### Key Deployment Steps Completed
 
@@ -94,7 +94,7 @@ This ensures proper initialization order and prevents race conditions.
 
 ### Access
 
-**Public URL:** https://athlete-signal-production.up.railway.app
+**Public URL:** https://athletesignal-production.up.railway.app
 
 **Features Available:**
 - User authentication via Strava + Oura OAuth
@@ -107,7 +107,7 @@ This ensures proper initialization order and prevents race conditions.
 
 **Deployment Date:** December 31, 2025  
 **Status:** ✅ Live and Operational  
-**GitHub Repository:** https://github.com/dereklin23/athlete-signal
+**GitHub Repository:** https://github.com/dereklin23/athletesignal
 
 ---
 

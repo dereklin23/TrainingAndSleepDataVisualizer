@@ -1,5 +1,5 @@
 {
-  "name": "athlete-signal",
+  "name": "athletesignal",
   "version": "1.0.0",
   "description": "Track your recovery and performance metrics with Athlete Signal",
   "main": "index.js",

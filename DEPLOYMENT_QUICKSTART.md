@@ -12,7 +12,7 @@ Your app is now **ready to deploy**! Follow these simple steps:
 
 1. Click **"+ New Project"**
 2. Select **"Deploy from GitHub repo"**
-3. Choose: **`athlete-signal`** repository
+3. Choose: **`athletesignal`** repository
 4. Railway will automatically start building! ⚡
 
 ## Step 3: Add Redis Database
@@ -139,7 +139,7 @@ Railway will automatically redeploy after you update variables.
 
 📖 **Full Guide**: [RAILWAY_DEPLOYMENT.md](./RAILWAY_DEPLOYMENT.md)  
 🔐 **OAuth Setup**: [OAUTH_SETUP.md](./OAUTH_SETUP.md)  
-📧 **Issues**: [GitHub Issues](https://github.com/dereklin23/athlete-signal/issues)
+📧 **Issues**: [GitHub Issues](https://github.com/dereklin23/athletesignal/issues)
 
 ---
 

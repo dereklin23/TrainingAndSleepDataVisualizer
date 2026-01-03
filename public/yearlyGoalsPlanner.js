@@ -290,7 +290,7 @@ class YearlyGoalsPlanner {
    */
   savePlan(plan) {
     if (!plan) return;
-    localStorage.setItem('athlete_signal_yearly_plan', JSON.stringify({
+    localStorage.setItem('athletesignal_yearly_plan', JSON.stringify({
       plan,
       createdAt: new Date().toISOString()
     }));
@@ -300,7 +300,7 @@ class YearlyGoalsPlanner {
    * Load yearly plan from localStorage
    */
   loadPlan() {
-    const stored = localStorage.getItem('athlete_signal_yearly_plan');
+    const stored = localStorage.getItem('athletesignal_yearly_plan');
     if (!stored) return null;
     
     try {

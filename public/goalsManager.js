@@ -9,7 +9,7 @@ class GoalsManager {
 
   // Load goals from localStorage
   loadGoals() {
-    const stored = localStorage.getItem('athlete_signal_goals');
+    const stored = localStorage.getItem('athletesignal_goals');
     if (stored) {
       return JSON.parse(stored);
     }
@@ -42,7 +42,7 @@ class GoalsManager {
 
   // Save goals to localStorage
   saveGoals() {
-    localStorage.setItem('athlete_signal_goals', JSON.stringify(this.goals));
+    localStorage.setItem('athletesignal_goals', JSON.stringify(this.goals));
   }
 
   // Update a specific goal

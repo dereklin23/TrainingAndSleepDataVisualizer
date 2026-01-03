@@ -74,7 +74,7 @@ A comprehensive fitness dashboard that overlays and visualizes training data fro
 
 ## 🌐 Live Demo
 
-**Production:** https://athlete-signal-production.up.railway.app
+**Production:** https://athletesignal-production.up.railway.app
 
 Experience Athlete Signal live! Connect your Strava and Oura accounts to see your personalized dashboard with training and recovery metrics.
 
@@ -93,7 +93,7 @@ Experience Athlete Signal live! Connect your Strava and Oura accounts to see you
 ## 📁 Project Structure
 
 ```
-athlete-signal/
+athletesignal/
 ├── public/
 │   ├── dashboardClient.js          # Client-side chart visualization
 │   ├── goalsManager.js             # Goal tracking system
@@ -142,8 +142,8 @@ See the complete guide: **[RAILWAY_DEPLOYMENT.md](./RAILWAY_DEPLOYMENT.md)**
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/dereklin23/athlete-signal.git
-   cd athlete-signal
+   git clone https://github.com/dereklin23/athletesignal.git
+   cd athletesignal
    ```
 
 2. **Install dependencies**

@@ -124,7 +124,7 @@ async function loadData(startDate, endDate) {
   }
 }
 
-function formatDateRangeTitle(startDate, endDate) {
+function formatDateRangeTitle(startDate, endDate, activePreset = null) {
   if (!startDate || !endDate) return "Dashboard";
   
   const start = new Date(startDate);
@@ -203,18 +203,34 @@ function formatDateRangeTitle(startDate, endDate) {
         return "Last 30 Days";
       }
       
-      // Check for "This Year" FIRST (more specific - Jan 1 to today)
-      // This must come before "This Month" because in January, both would match
-      if (startYear === currentYear && startMonth === 1 && startDay === 1 && endDate === todayStr) {
-        return "This Year";
-      }
-      
       // Check for "This Month" (startDate is first day of current month, endDate is today)
-      // Only matches if NOT January (since January would be caught by "This Year" above)
       const firstOfMonth = new Date(currentYear, currentMonth, 1);
       const firstOfMonthStr = formatDate(firstOfMonth);
-      if (startDate === firstOfMonthStr && endDate === todayStr) {
+      const isThisMonth = startDate === firstOfMonthStr && endDate === todayStr;
+      
+      // Check for "This Year" (startDate is Jan 1 of current year, endDate is today)
+      const isThisYear = startYear === currentYear && startMonth === 1 && startDay === 1 && endDate === todayStr;
+      
+      // In January, both "This Month" and "This Year" produce the same date range (Jan 1 to today)
+      // Use the active preset to determine which one to show
+      if (isThisMonth && isThisYear) {
+        // Ambiguous case (January) - use preset if available
+        if (activePreset === 'thisYear') {
+          return "This Year";
+        } else if (activePreset === 'thisMonth') {
+          return "This Month";
+        }
+        // Fallback: prefer "This Month" as it's more specific
         return "This Month";
+      }
+      
+      // Non-ambiguous cases
+      if (isThisMonth) {
+        return "This Month";
+      }
+      
+      if (isThisYear) {
+        return "This Year";
       }
     }
     
@@ -260,7 +276,10 @@ function formatDateRangeTitle(startDate, endDate) {
 function updatePageTitle(startDate, endDate) {
   const titleEl = document.getElementById('pageTitle');
   if (titleEl) {
-    titleEl.textContent = formatDateRangeTitle(startDate, endDate);
+    // Check which preset button is active to get the correct title
+    const activePresetButton = document.querySelector('[data-preset].active');
+    const preset = activePresetButton ? activePresetButton.getAttribute('data-preset') : null;
+    titleEl.textContent = formatDateRangeTitle(startDate, endDate, preset);
   }
 }
 
